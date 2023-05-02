@@ -1,4 +1,5 @@
 import React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import FeedbackItem from './FeedbackItem';
 import PropTypes from 'prop-types';
 
@@ -7,11 +8,24 @@ export const FeedbackList = ({ feedback, handleDelete }) => {
     return <p>No Feedback Yet.</p>;
   }
   return (
-    <div className="feedback-list">
-      {feedback.map((item) => (
-        <FeedbackItem key={item.id} item={item} deleteHandler={handleDelete} />
-      ))}
-    </div>
+    <AnimatePresence>
+      <div className="feedback-list">
+        {feedback.map((item) => (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 1 }}
+            animate={{ apacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <FeedbackItem
+              key={item.id}
+              item={item}
+              deleteHandler={handleDelete}
+            />
+          </motion.div>
+        ))}
+      </div>
+    </AnimatePresence>
   );
 };
 
