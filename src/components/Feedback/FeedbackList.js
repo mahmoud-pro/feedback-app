@@ -1,42 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import FeedbackItem from './FeedbackItem';
-import PropTypes from 'prop-types';
+import FeedbackContext from '../../context/FeedbackContext';
+import Spinner from '../Spinner/Spinner';
 
-export const FeedbackList = ({ feedback, handleDelete }) => {
-  if (!feedback || feedback.length === 0) {
+export const FeedbackList = () => {
+  const { feedback, isLoading } = useContext(FeedbackContext);
+
+  if (!isLoading && (!feedback || feedback.length === 0)) {
     return <p>No Feedback Yet.</p>;
   }
-  return (
-    <AnimatePresence>
-      <div className="feedback-list">
+  return isLoading ? (
+    <Spinner />
+  ) : (
+    <div className="feedback-list">
+      <AnimatePresence>
         {feedback.map((item) => (
           <motion.div
             key={item.id}
-            initial={{ opacity: 1 }}
-            animate={{ apacity: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            layout
           >
-            <FeedbackItem
-              key={item.id}
-              item={item}
-              deleteHandler={handleDelete}
-            />
+            <FeedbackItem key={item.id} item={item} />
           </motion.div>
         ))}
-      </div>
-    </AnimatePresence>
+      </AnimatePresence>
+    </div>
   );
-};
-
-FeedbackList.propTypes = {
-  feedback: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      text: PropTypes.string.isRequired,
-      rating: PropTypes.number.isRequired,
-    })
-  ),
 };
 
 export default FeedbackList;
