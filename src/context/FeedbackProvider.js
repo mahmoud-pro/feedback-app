@@ -15,7 +15,10 @@ const FeedbackProvider = ({ children }) => {
 
   // fetch feedback
   const fetchFeedback = async () => {
-    const response = await fetch(`/feedback?_sort=id&_order=desc`);
+    const response = await fetch(`/feedback?_sort=id&_order=desc`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
     const data = await response.json();
 
     setFeedback(data);
@@ -39,6 +42,7 @@ const FeedbackProvider = ({ children }) => {
     if (window.confirm('Are you sure you want to delete?')) {
       await fetch(`/feedback/${id}`, {
         method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
       });
       setFeedback(feedback.filter((item) => item.id !== id));
     }
